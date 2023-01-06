@@ -100,32 +100,42 @@ void playGame(){
         progress[i] = '_';
     progress[strlen(word)] = '\0';
 
+    // the array of incorrect letters
+    char incorrectLetters[MAXIMUM_GUESSES + 1];
+    for (int i = 0; i < MAXIMUM_GUESSES; i++)
+        incorrectLetters[i] = ' ';
+    incorrectLetters[0] = '\0';
 
     // while loop that loops until the player has won/lost
     while (incorrectGuesses < MAXIMUM_GUESSES && strchr(progress, '_') != NULL) {
         // Print the current progress and the hangman
-        printf("Word: %s                 \n", progress);
+        printf("Word: %s\n", progress);
         drawHangman(incorrectGuesses);
 
         // player's guess
         char guess[3];
         printf("Enter a letter: ");
         scanf("%s", guess);
+        printf("\n############################################################\n############################################################\n\n");
 
 
-        // if statement that checks if the inputted guess is a letter
+        // if statement that checks if the inputted guess is a lowercase letter
         if (guess[0] < 'a' || guess[0] > 'z') {
             printf("Please enter a lowercase letter.\n");
             continue;
         }
 
-        // check if the guess is correct
+        // check if the guess is already been used before. if not, check of it is correct
+        if (strchr(incorrectLetters, guess[0]) != NULL || strchr(progress, guess[0]) != NULL) {
+            printf("You have already tried that letter. Try again.\n");
+        } else {
             if (!check_letter(guess[0], word, progress))  // if its an incorrect guess then add +1 to
-                                                                               //number of incorrect guesses
-                {
+                                                                                //number of incorrect guesses
+            {
                 incorrectGuesses++;
             }
         }
+    }
 
     // print the final result
     if (incorrectGuesses == MAXIMUM_GUESSES){
@@ -144,7 +154,9 @@ void playGame(){
 int main(){
     srand(time(0));  // random number generator i looked up on the internet
 
-    printf("Welcome to Hangman!\n");
+    printf("   * * * * * * * * * * * *\n");
+    printf("   * Welcome to Hangman! *\n");
+    printf("   * * * * * * * * * * * *\n");
 
     playGame();
     return 0;
