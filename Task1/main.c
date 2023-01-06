@@ -97,7 +97,7 @@ void load_unload_passengers(int *num_of_passengers) {
                 if (num < 0) {
                     printf("Invalid input. Please enter a positive number.\n");
                 }else if (num > *num_of_passengers) {
-                    printf("Elevator is empty. Can't unload more passengers than there are in the elevator.");
+                    printf("Elevator is empty. Can't unload more passengers than there are in the elevator.\n");
                 } else {
                     *num_of_passengers -= num;
                     break;
