@@ -6,8 +6,9 @@
 
 
 // function that prints the options for the user to choose. It also shows the current floor
-void print_option_list(int current_floor) {
+void print_option_list(int current_floor, int num_passengers) {
     printf("\nYou're currently on floor: %d\n", current_floor);
+    printf("Number of passengers: %d\n", num_passengers);
     printf("\n");
     printf("Menu:\n");
     printf("  [G] Ground floor (0) \n");
@@ -22,7 +23,7 @@ void print_option_list(int current_floor) {
 
 // function that gets the new floor the user wants to go to
 
-int get_new_floor(int current_floor) {
+int get_new_floor(int current_floor, int num_of_passengers) {
     char new_floor[2]; // declare new_floor as a string with length of 2
     do {
         printf("\nEnter the floor you want to go to: ");
@@ -48,13 +49,13 @@ int get_new_floor(int current_floor) {
 // function of movement of the elevator from the current floor to the new floor
 void moving_elevator(int current_floor, int new_floor) {
     if (new_floor > current_floor) {
-        printf("Going up...\n");
+        printf("\nGoing up...\n");
         for (int i = current_floor + 1; i <= new_floor; i++) {
             printf("%d...\n", i);
         }
 
     } else if (new_floor < current_floor) {
-        printf("Going down...\n");
+        printf("\nGoing down...\n");
         for (int i = current_floor - 1; i >= new_floor; i--) {
             printf("%d...\n", i);
         }
@@ -62,20 +63,70 @@ void moving_elevator(int current_floor, int new_floor) {
     current_floor = new_floor;
 }
 
+//a function that adds or removes passenegrs from the elevator
+void load_unload_passengers(int current_floor, int *num_of_passengers) {
+    char load_or_unload;
+    do {
+        printf("Type [L] to load passengers or type [U] to unload passengers: ");
+        scanf(" %c", &load_or_unload);
+
+        //if statement that proceeds if the input is L or U otherwise give an "invalid input" message
+        if (load_or_unload == 'L') {
+            int num;
+            do {
+                printf("Number of passengers to load: ");
+                scanf("%d", &num);
+                if (num < 0) {
+                    printf("Invalid input. Please enter a positive number.\n");
+                } else {
+                    *num_of_passengers += num; //add the number of the paseengers the user wants
+                                                // to load the current number of passengers
+                    break;
+                }
+            } while (true);
+            break;
+        } else if (load_or_unload == 'U') {
+            int num;
+            do {
+                printf("Number of passengers to unload: ");
+                scanf("%d", &num);
+
+                if (num < 0) {
+                    printf("Invalid input. Please enter a positive number.\n");
+                } else {
+                    *num_of_passengers -= num;
+                    break;
+                }
+            } while (true);
+            break;
+        } else {
+            printf("Invalid input. Please enter L or U.\n");
+        }
+    } while (true);
+}
+
+
 int main(void) {
     printf("Welcome!\n");
 
     int current_floor = MIN_FLOOR; //we start from floor 0, aka ground floor
+    int num_of_passengers = 1;
 
     while (true) {
-        print_option_list(current_floor);//print the list and current floor
 
-        int new_floor = get_new_floor(current_floor); //we get the new floor from the user
-        if (new_floor == -1) {
-            break; //we finish if new_floor is -1, which means that the user lastly inputted "A"
+            print_option_list(current_floor,
+                              num_of_passengers);//print the list and current floor and number of passengers
+
+            int new_floor = get_new_floor(current_floor,
+                                          num_of_passengers); //we get the new floor from the user and the number of passengers
+            if (new_floor == -1) {
+                break; //we finish if new_floor is -1, which means that the user lastly inputted "A"
+            }
+            load_unload_passengers(current_floor,
+                                   &num_of_passengers);//load or unload the passengers according to the user's input
+            moving_elevator(current_floor,
+                            new_floor); //the motion of the elevator moving from current floor to new floor is printed
+            current_floor = new_floor; //we save the new floor as the current floor until the next move
         }
-        moving_elevator(current_floor, new_floor); //the motion of the elevator moving from current floor to new floor is printed
-        current_floor = new_floor; //we save the new floor as the current floor until the next move
+        return 0;
     }
-    return 0;
-}
