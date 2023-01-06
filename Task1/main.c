@@ -117,6 +117,14 @@ int main(void) {
     int current_floor = MIN_FLOOR; //we start from floor 0, aka ground floor
     int num_of_passengers = 1;
 
+    //        // Read the current floor from a file, if it exists
+        FILE *fp;
+        fp = fopen("current_floor.txt", "r"); // Open the file in read mode
+        if (fp != NULL) { // If the file exists
+            fscanf(fp, "%d", &current_floor); // Read the current floor from the file
+            fclose(fp); // Close the file
+        }
+
     while (true) {
         // if the number of the passengers is zero, so the user unloads all the passengers then the program ends
         if (num_of_passengers == 0) {
@@ -135,5 +143,10 @@ int main(void) {
                             new_floor); //the motion of the elevator moving from current floor to new floor is printed
             current_floor = new_floor; //we save the new floor as the current floor until the next move
         }
+//     Save the current floor to a file before exiting the program
+        fp = fopen("current_floor.txt", "w"); // Open the file in write mode
+        fprintf(fp, "%d", current_floor); // Save the current floor to the file
+        fclose(fp); // Close the file
         return 0;
+
     }
