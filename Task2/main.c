@@ -108,7 +108,7 @@ void playGame(){
 
     // while loop that loops until the player has won/lost
     while (incorrectGuesses < MAXIMUM_GUESSES && strchr(progress, '_') != NULL) {
-        // Print the current progress and the hangman
+        // print current progress and the hangman
         printf("Word: %s\n", progress);
         drawHangman(incorrectGuesses);
 
@@ -133,6 +133,12 @@ void playGame(){
                                                                                 //number of incorrect guesses
             {
                 incorrectGuesses++;
+
+                // add the incorrect letter to the list of incorrect letters
+                int len = strlen(incorrectLetters);
+                incorrectLetters[len] = guess[0];
+                incorrectLetters[len + 1] = ' ';  // add a space after the letter
+                incorrectLetters[len + 2] = '\0';
             }
         }
     }
