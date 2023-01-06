@@ -23,7 +23,7 @@ void print_option_list(int current_floor, int num_passengers) {
 
 // function that gets the new floor the user wants to go to
 
-int get_new_floor(int current_floor, int num_of_passengers) {
+int get_new_floor() {
     char new_floor[2]; // declare new_floor as a string with length of 2
     do {
         printf("\nEnter the floor you want to go to: ");
@@ -64,7 +64,7 @@ void moving_elevator(int current_floor, int new_floor) {
 }
 
 //a function that adds or removes passenegrs from the elevator
-void load_unload_passengers(int current_floor, int *num_of_passengers) {
+void load_unload_passengers(int *num_of_passengers) {
     char load_or_unload;
     do {
         printf("Type [L] to load passengers or type [U] to unload passengers: ");
@@ -78,6 +78,9 @@ void load_unload_passengers(int current_floor, int *num_of_passengers) {
                 scanf("%d", &num);
                 if (num < 0) {
                     printf("Invalid input. Please enter a positive number.\n");
+                } else if (*num_of_passengers + num > 10) // the elevator can accept up to 10 passengers
+                    {
+                    printf("Elevator is full. Can't load more than 10 passengers.\n");
                 } else {
                     *num_of_passengers += num; //add the number of the paseengers the user wants
                                                 // to load the current number of passengers
@@ -93,6 +96,8 @@ void load_unload_passengers(int current_floor, int *num_of_passengers) {
 
                 if (num < 0) {
                     printf("Invalid input. Please enter a positive number.\n");
+                }else if (num > *num_of_passengers) {
+                    printf("Elevator is empty. Can't unload more passengers than there are in the elevator.");
                 } else {
                     *num_of_passengers -= num;
                     break;
@@ -113,17 +118,19 @@ int main(void) {
     int num_of_passengers = 1;
 
     while (true) {
-
+        // if the number of the passengers is zero, so the user unloads all the passengers then the program ends
+        if (num_of_passengers == 0) {
+            printf("Bye!\n");
+            break;
+        }
             print_option_list(current_floor,
                               num_of_passengers);//print the list and current floor and number of passengers
 
-            int new_floor = get_new_floor(current_floor,
-                                          num_of_passengers); //we get the new floor from the user and the number of passengers
+            int new_floor = get_new_floor(); //we get the new floor from the user and the number of passengers
             if (new_floor == -1) {
                 break; //we finish if new_floor is -1, which means that the user lastly inputted "A"
             }
-            load_unload_passengers(current_floor,
-                                   &num_of_passengers);//load or unload the passengers according to the user's input
+            load_unload_passengers(&num_of_passengers);//load or unload the passengers according to the user's input
             moving_elevator(current_floor,
                             new_floor); //the motion of the elevator moving from current floor to new floor is printed
             current_floor = new_floor; //we save the new floor as the current floor until the next move
