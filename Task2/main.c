@@ -110,11 +110,12 @@ void playGame(){
     while (incorrectGuesses < MAXIMUM_GUESSES && strchr(progress, '_') != NULL) {
         // print current progress and the hangman
         printf("Word: %s\n", progress);
+        printf("                           Already used letters: %s\n", incorrectLetters);
         drawHangman(incorrectGuesses);
 
         // player's guess
         char guess[3];
-        printf("Enter a letter: ");
+        printf("                           Enter a letter: ");
         scanf("%s", guess);
         printf("\n############################################################\n############################################################\n\n");
 
@@ -152,7 +153,8 @@ void playGame(){
                "     |    / \\\n"
                "     |\n"
                "_____|________\n");
-        printf("You lost! The word was: %s\n", word);}
+        printf("You lost! The word was: %s\n", word);
+        printf("Every time you play Hangman, a stickman family is left without a father.\n");}
     else
         printf("You won! The word was: %s\n", word);
 }
@@ -163,7 +165,7 @@ int main(){
     printf("   * * * * * * * * * * * *\n");
     printf("   * Welcome to Hangman! *\n");
     printf("   * * * * * * * * * * * *\n");
-
+    printf("\n");
     playGame();
     return 0;
 }
